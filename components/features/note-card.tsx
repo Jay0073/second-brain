@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendar } from "lucide-react";
+import { Calendar, File as FileIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { BrainNote } from "@/hooks/useBrain";
 
@@ -28,9 +28,33 @@ export function NoteCard({ note }: { note: BrainNote }) {
           <div className="truncate text-base font-semibold tracking-tight">
             {note.title}
           </div>
-          <div className="mt-2 line-clamp-2 text-sm leading-6 text-[color:var(--color-muted-foreground)]">
+          <div className="mt-2 text-sm text-[color:var(--color-muted-foreground)]">
             {note.summary}
           </div>
+          
+          {note.file_url && (
+            <div className="mt-4">
+              {/\.(jpg|jpeg|png|gif|webp)$/i.test(note.file_name ?? note.file_url ?? "") ? (
+                <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-border">
+                  <img 
+                    src={note.file_url} 
+                    alt={note.file_name || "Attachment"} 
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              ) : (
+                <a 
+                   href={note.file_url} 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   className="flex items-center gap-2 rounded-lg border border-border bg-surface-solid p-3 text-sm transition hover:bg-surface-hover"
+                >
+                  <FileIcon className="h-4 w-4 text-[color:var(--color-muted-foreground)]" />
+                  <span className="truncate">{note.file_name || "Attachment"}</span>
+                </a>
+              )}
+            </div>
+          )}
         </div>
       </div>
 

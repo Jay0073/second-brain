@@ -8,6 +8,8 @@ export type BrainNote = {
   title: string;
   summary: string | null;
   tags: string[] | null;
+  file_url?: string | null;
+  file_name?: string | null;
   created_at: string;
 };
 
@@ -62,17 +64,19 @@ export function useBrain(): UseBrainState {
             Array.isArray(item.tags) && item.tags.length > 0
               ? item.tags
               : typeof item.tags === "string"
-              ? item.tags
+                ? item.tags
                   .split(",")
                   .map((t: string) => t.trim())
                   .filter(Boolean)
-              : [];
+                : [];
 
           return {
             id: String(item.id),
             title: item.title ?? "Untitled",
             summary: item.summary ?? item.content ?? "",
             tags,
+            file_url: item.file_url,
+            file_name: item.file_name,
             created_at:
               typeof item.created_at === "string"
                 ? item.created_at

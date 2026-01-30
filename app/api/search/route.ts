@@ -1,11 +1,6 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/supabase/server";
 import { generateEmbedding } from "@/lib/ai";
 import { NextResponse } from "next/server";
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 type FilterState = {
   types?: string[];
@@ -13,8 +8,16 @@ type FilterState = {
   sort?: "date" | "relevance";
 };
 
+type NoteRow = { tags?: string[]; type?: string; created_at?: string; [key: string]: unknown };
+
 export async function POST(req: Request) {
   try {
+    const supabase = await createClient();
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { query, filters } = (await req.json()) as {
       query?: string | null;
       filters?: FilterState;
@@ -23,87 +26,90 @@ export async function POST(req: Request) {
     const filterState = filters ?? {};
     const hasQuery = query && query.trim().length > 0;
     const sortBy = filterState.sort ?? "date";
-    const useRelevance = hasQuery && sortBy === "relevance";
 
-    // 1. If no query OR relevance sort not requested, use standard query with filters
-    if (!hasQuery || !useRelevance) {
+    const typeFilter = (filterState.types && filterState.types.length > 0) 
+    ? filterState.types[0].toLowerCase() 
+    : null;
+
+    // ---------------------------------------------------------
+    // SCENARIO 1: NO SEARCH QUERY (Just browsing/filtering)
+    // ---------------------------------------------------------
+    if (!hasQuery) {
       let queryBuilder = supabase.from("notes").select("*");
 
-      // Apply type filter
+      // 1. Filter by Type (SQL level is faster)
       if (filterState.types && filterState.types.length > 0) {
-        queryBuilder = queryBuilder.in("type", filterState.types);
+        const normalizedTypes = filterState.types.map((t) => t.toLowerCase());
+        queryBuilder = queryBuilder.in("type", normalizedTypes);
       }
 
-      // Apply tags filter
-      // Note: For array columns, we filter client-side after fetching
-      // because Supabase's .contains() requires ALL tags, not ANY
-      // We'll fetch all results and filter by tags overlap in memory
-
-      // Apply sorting
-      if (sortBy === "date") {
-        queryBuilder = queryBuilder.order("created_at", { ascending: false });
-      }
-
-      queryBuilder = queryBuilder.limit(50); // Fetch more to filter by tags
+      // 2. Sort by Date (Default for browsing)
+      queryBuilder = queryBuilder.order("created_at", { ascending: false });
+      queryBuilder = queryBuilder.limit(50);
 
       const { data, error } = await queryBuilder;
-
       if (error) throw error;
 
       let results = data ?? [];
 
-      // Apply tags filter client-side (check if tags array overlaps with filter tags)
+      // 3. Filter by Tags (Client-side for flexibility)
       if (filterState.tags && filterState.tags.length > 0) {
-        results = results.filter((item: any) => {
+        results = (results as NoteRow[]).filter((item) => {
           const itemTags = Array.isArray(item.tags) ? item.tags : [];
           return filterState.tags!.some((tag) => itemTags.includes(tag));
         });
       }
 
-      // Limit final results
-      results = results.slice(0, 20);
-
-      return NextResponse.json(results);
+      return NextResponse.json(results.slice(0, 20));
     }
 
-    // 2. If there is a query AND relevance sort requested, perform Semantic Vector Search
+    // ---------------------------------------------------------
+    // SCENARIO 2: HAS SEARCH QUERY (Always use Vector Search)
+    // ---------------------------------------------------------
     const embedding = await generateEmbedding(query);
 
-    // Call the RPC function for vector search
-    // Note: The RPC might need to be updated to accept filters if you want to combine vector search + filters
-    // For now, we'll do vector search first, then apply filters client-side if needed
     const { data: vectorResults, error: vectorError } = await supabase.rpc(
       "match_notes",
       {
         query_embedding: embedding,
         match_threshold: 0.3,
-        match_count: 20, // Get more results to filter
-      },
+        match_count: 20, // Fetch more to allow for filtering
+        filter_type: typeFilter,
+      }
     );
 
     if (vectorError) throw vectorError;
 
     let filtered = vectorResults ?? [];
 
-    // Apply type filter on vector results
+    // 1. Apply Type Filter
     if (filterState.types && filterState.types.length > 0) {
-      filtered = filtered.filter((item: any) =>
-        filterState.types!.includes(item.type),
+      const normalizedTypes = filterState.types.map((t) => t.toLowerCase());
+      filtered = (filtered as NoteRow[]).filter((item) =>
+        normalizedTypes.includes((item.type || "note").toLowerCase())
       );
     }
 
-    // Apply tags filter on vector results
+    // 2. Apply Tags Filter
     if (filterState.tags && filterState.tags.length > 0) {
-      filtered = filtered.filter((item: any) => {
+      filtered = (filtered as NoteRow[]).filter((item) => {
         const itemTags = Array.isArray(item.tags) ? item.tags : [];
         return filterState.tags!.some((tag) => itemTags.includes(tag));
       });
     }
 
-    // Limit results
-    filtered = filtered.slice(0, 20);
+    // 3. Handle Sorting
+    // Vector search returns by 'relevance' (similarity) by default.
+    // If user specifically asked for 'Date', we re-sort the RELEVANT results by date.
+    if (sortBy === "date") {
+      (filtered as NoteRow[]).sort(
+        (a, b) =>
+          new Date(b.created_at ?? 0).getTime() -
+          new Date(a.created_at ?? 0).getTime()
+      );
+    }
 
-    return NextResponse.json(filtered);
+    return NextResponse.json(filtered.slice(0, 20));
 
   } catch (error) {
     console.error("Search error:", error);

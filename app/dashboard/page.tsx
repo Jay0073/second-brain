@@ -1,18 +1,32 @@
 "use client";
 
 import * as React from "react";
-import { Filter, Search } from "lucide-react";
+import { Filter, Search, LayoutGrid, Network } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Modal } from "@/components/ui/modal";
 import { DashboardSkeleton } from "@/components/features/dashboard-skeleton";
 import { NoteCard } from "@/components/features/note-card";
+import { BrainGraph3D } from "@/components/features/brain-graph";
 import { FilterModal } from "@/components/modals/filter-modal";
 import { useUiStore } from "@/lib/store/uiStore";
 import { useBrain } from "@/hooks/useBrain";
+import { useAuth } from "@/components/auth-provider";
+import type { BrainNote } from "@/hooks/useBrain";
+import { cn } from "@/lib/utils";
+
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+  });
+}
 
 export default function DashboardPage() {
   const openAddNote = useUiStore((s) => s.openAddNote);
   const openFilter = useUiStore((s) => s.openFilter);
+  const openLogin = useUiStore((s) => s.openLogin);
   const {
     notes,
     isLoading,
@@ -22,6 +36,14 @@ export default function DashboardPage() {
     handleApplyFilters,
     handleResetFilters,
   } = useBrain();
+  const { user, loading } = useAuth();
+  const [viewMode, setViewMode] = React.useState<"grid" | "graph">("grid");
+
+  React.useEffect(() => {
+    if (!loading && !user) {
+      openLogin();
+    }
+  }, [user, loading, openLogin]);
 
   const hasActiveFilters =
     activeFilters.types.length > 0 ||
@@ -65,6 +87,36 @@ export default function DashboardPage() {
               </span>
             )}
           </Button>
+          <div className="flex items-center gap-1 rounded-full border border-border bg-surface p-1">
+            <button
+              type="button"
+              onClick={() => setViewMode("grid")}
+              className={cn(
+                "flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium transition",
+                viewMode === "grid"
+                  ? "bg-surface-solid text-foreground shadow-sm"
+                  : "text-[color:var(--color-muted-foreground)] hover:text-foreground",
+              )}
+              aria-pressed={viewMode === "grid"}
+            >
+              <LayoutGrid className="h-4 w-4" />
+              Grid
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode("graph")}
+              className={cn(
+                "flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium transition",
+                viewMode === "graph"
+                  ? "bg-surface-solid text-foreground shadow-sm"
+                  : "text-[color:var(--color-muted-foreground)] hover:text-foreground",
+              )}
+              aria-pressed={viewMode === "graph"}
+            >
+              <Network className="h-4 w-4" />
+              Graph
+            </button>
+          </div>
           <Button onClick={openAddNote}>New Note</Button>
         </div>
       </div>
@@ -84,10 +136,23 @@ export default function DashboardPage() {
               Create your first note
             </Button>
           </div>
+        ) : viewMode === "graph" ? (
+          <div className="h-[600px] w-full">
+            <BrainGraph3D notes={notes} />
+          </div>
         ) : (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div
+            className="masonry-grid"
+            style={{
+              columnCount: 3,
+              columnGap: "1rem",
+              maxWidth: "100%",
+            }}
+          >
             {notes.map((n) => (
-              <NoteCard key={n.id} note={n} />
+              <div key={n.id} style={{ breakInside: "avoid", marginBottom: "1rem" }}>
+                <NoteCard note={n} />
+              </div>
             ))}
           </div>
         )}

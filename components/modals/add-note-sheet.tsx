@@ -1,11 +1,12 @@
 "use client";
 
 import * as React from "react";
-import { Wand2 } from "lucide-react";
+import { Wand2, Paperclip, Loader2, X } from "lucide-react";
 import { Sheet } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useUiStore } from "@/lib/store/uiStore";
+import { createClient } from "@/lib/supabase/client";
 
 export function AddNoteSheet() {
   const open = useUiStore((s) => s.addNoteOpen);
@@ -16,12 +17,17 @@ export function AddNoteSheet() {
   const [type, setType] = React.useState("");
   const [tags, setTags] = React.useState<string[]>([]);
   const [generating, setGenerating] = React.useState(false);
+  
+  const [file, setFile] = React.useState<File | null>(null);
+  const [uploading, setUploading] = React.useState(false);
+  const [attachmentUrl, setAttachmentUrl] = React.useState<string | null>(null);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
-  const saveNote = (title: string, content: string, type: string, tags: string[]) => {
+  const saveNote = (title: string, content: string, type: string, tags: string[], file_url?: string | null, file_name?: string | null) => {
     fetch("/api/notes", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ title, content, type, tags }),
+      body: JSON.stringify({ title, content, type, tags, file_url, file_name }),
     });
   };
 
@@ -31,6 +37,44 @@ export function AddNoteSheet() {
     setType("");
     setTags([]);
     setGenerating(false);
+    setFile(null);
+    setAttachmentUrl(null);
+    setUploading(false);
+  };
+
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const selectedFile = e.target.files[0];
+      setFile(selectedFile);
+      setUploading(true);
+
+      try {
+        const supabase = createClient();
+        const fileExt = selectedFile.name.split(".").pop();
+        const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+        const filePath = `${(await supabase.auth.getUser()).data.user?.id}/${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from("attachments")
+          .upload(filePath, selectedFile);
+
+        if (uploadError) {
+          throw uploadError;
+        }
+
+        const { data: { publicUrl } } = supabase.storage
+          .from("attachments")
+          .getPublicUrl(filePath);
+
+        setAttachmentUrl(publicUrl);
+      } catch (error) {
+        console.error("Upload failed", error);
+        alert("Upload failed");
+        setFile(null);
+      } finally {
+        setUploading(false);
+      }
+    }
   };
 
   return (
@@ -101,6 +145,49 @@ export function AddNoteSheet() {
           </div>
         </div>
 
+        <div>
+           <div className="flex items-center gap-2 mb-2">
+             <Button
+               variant="secondary"
+               size="sm"
+               className="gap-2"
+               onClick={() => fileInputRef.current?.click()}
+               disabled={uploading}
+             >
+               <Paperclip className="h-4 w-4" />
+               {uploading ? "Uploading..." : "Attach File"}
+             </Button>
+             <input
+               type="file"
+               ref={fileInputRef}
+               className="hidden"
+               onChange={handleFileSelect}
+               accept="image/*,application/pdf,text/*" 
+             />
+           </div>
+           
+           {file && (
+             <div className="flex items-center gap-2 text-sm bg-surface-solid border border-border px-3 py-2 rounded-lg">
+               <span className="truncate max-w-[200px]">{file.name}</span>
+               {uploading ? (
+                 <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />
+               ) : (
+                 <button 
+                   onClick={(e) => {
+                     e.stopPropagation();
+                     setFile(null);
+                     setAttachmentUrl(null);
+                     if (fileInputRef.current) fileInputRef.current.value = "";
+                   }}
+                   className="text-muted-foreground hover:text-foreground"
+                 >
+                    <X className="h-3 w-3" />
+                 </button>
+               )}
+             </div>
+           )}
+        </div>
+
         <div className="flex flex-wrap items-center gap-2">
           {tags.length ? (
             tags.map((t) => (
@@ -146,7 +233,7 @@ export function AddNoteSheet() {
             </Button>
             <Button
               onClick={() => {
-                saveNote(title, content, type, tags);
+                saveNote(title, content, type, tags, attachmentUrl, file?.name);
                 close();
                 reset();
               }}

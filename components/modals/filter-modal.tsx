@@ -95,6 +95,20 @@ export function FilterModal({
     close();
   };
 
+  // Inline skeleton block for tag loading
+  function TagSkeleton() {
+    return (
+      <div className="flex gap-2 flex-wrap">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div
+            key={i}
+            className="h-7 w-16 rounded-full bg-[color-mix(in_oklab,var(--foreground)_10%,transparent)] animate-pulse"
+          />
+        ))}
+      </div>
+    );
+  }
+
   return (
     <Modal
       open={open}
@@ -107,20 +121,24 @@ export function FilterModal({
         <div>
           <div className="mb-3 text-sm font-medium">Type</div>
           <div className="flex flex-wrap gap-2">
-            {["Note", "Link", "Insight"].map((type) => (
+            {[
+              { label: "Note", value: "note" },
+              { label: "Link", value: "link" },
+              { label: "Insight", value: "insight" },
+            ].map((type) => (
               <button
-                id={`filter-type-${type}`}
-                key={type}
+                id={`filter-type-${type.value}`}
+                key={type.value}
                 type="button"
-                onClick={() => toggleType(type)}
+                onClick={() => toggleType(type.value)}
                 className={cn(
                   "rounded-full border px-3 py-1.5 text-xs font-medium transition",
-                  localFilters.types.includes(type)
+                  localFilters.types.includes(type.value)
                     ? "border-accent bg-accent text-accent-foreground"
                     : "border-border bg-surface text-foreground hover:bg-[color-mix(in_oklab,var(--surface)_85%,var(--foreground)_2%)]",
                 )}
               >
-                {type}
+                {type.label}
               </button>
             ))}
           </div>
@@ -130,9 +148,7 @@ export function FilterModal({
         <div>
           <div className="mb-3 text-sm font-medium">Tags</div>
           {loadingTags ? (
-            <div className="text-xs text-[color:var(--color-muted-foreground)]">
-              Loading tags…
-            </div>
+            <TagSkeleton />
           ) : availableTags.length === 0 ? (
             <div className="text-xs text-[color:var(--color-muted-foreground)]">
               No tags available.
@@ -153,7 +169,7 @@ export function FilterModal({
                   )}
                 >
                   {tagObj.tag}
-                  <span className="ml-1 text-[10px] text-muted-foreground">({tagObj.count})</span>
+                  {/* <span className="ml-1 text-[10px] text-muted-foreground">({tagObj.count})</span> */}
                 </button>
               ))}
             </div>
