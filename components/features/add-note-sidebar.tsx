@@ -1,14 +1,14 @@
 "use client";
 
 import * as React from "react";
-import { Wand2, Paperclip, Loader2, X } from "lucide-react";
-import { Sheet } from "@/components/ui/sheet";
+import { Wand2, Paperclip, Loader2, X, PanelRightClose, PanelRightOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useUiStore } from "@/lib/store/uiStore";
 import { createClient } from "@/lib/supabase/client";
+import { cn } from "@/lib/utils";
 
-export function AddNoteSheet() {
+export function AddNoteSidebar({ onSave }: { onSave?: () => void }) {
   const open = useUiStore((s) => s.addNoteOpen);
   const close = useUiStore((s) => s.closeAddNote);
 
@@ -17,18 +17,29 @@ export function AddNoteSheet() {
   const [type, setType] = React.useState("");
   const [tags, setTags] = React.useState<string[]>([]);
   const [generating, setGenerating] = React.useState(false);
-  
+  const [saving, setSaving] = React.useState(false);
+
   const [file, setFile] = React.useState<File | null>(null);
   const [uploading, setUploading] = React.useState(false);
   const [attachmentUrl, setAttachmentUrl] = React.useState<string | null>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
-  const saveNote = (title: string, content: string, type: string, tags: string[], file_url?: string | null, file_name?: string | null) => {
-    fetch("/api/notes", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ title, content, type, tags, file_url, file_name }),
-    });
+  const saveNote = async (title: string, content: string, type: string, tags: string[], file_url?: string | null, file_name?: string | null) => {
+    try {
+      if (!title.trim() && !content.trim()) return;
+
+      const res = await fetch("/api/notes", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ title, content, type, tags, file_url, file_name }),
+      });
+
+      if (!res.ok) throw new Error("Failed to save");
+      return true;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
   };
 
   const reset = () => {
@@ -77,19 +88,26 @@ export function AddNoteSheet() {
     }
   };
 
+  if (!open) return null;
+
   return (
-    <Sheet
-      open={open}
-      onOpenChange={(o) => {
-        if (!o) {
-          close();
-          reset();
-        }
-      }}
-      title="New note"
-      description="Draft a thought, then let AI suggest tags."
+    <aside
+      className={cn(
+        "fixed right-0 top-16 z-30 flex h-[calc(100vh-4rem)] w-[400px] flex-col border-l border-border bg-surface-solid shadow-xl transition-transform duration-300 ease-in-out",
+        open ? "translate-x-0" : "translate-x-full"
+      )}
     >
-      <div className="space-y-5">
+      <div className="flex items-center justify-between border-b border-border px-5 py-4">
+        <Button variant="ghost" size="lg" onClick={close} className="h-8 w-8 p-0">
+          <PanelRightClose className="h-5 w-5" />
+        </Button>
+        <div className="text-right">
+          <div className="font-semibold">New note</div>
+          <div className="text-xs text-[color:var(--color-muted-foreground)]">Draft a thought, then let AI suggest tags.</div>
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto p-5 space-y-5">
         <div className="space-y-2">
           <div className="text-sm font-medium">Title</div>
           <Input
@@ -105,7 +123,7 @@ export function AddNoteSheet() {
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder="Write your note…"
-            className="min-h-44 w-full resize-y rounded-3xl border border-border bg-surface-solid p-4 text-sm outline-none transition focus:ring-2 focus:ring-[color:var(--color-ring)]"
+            className="min-h-44 w-full resize-y rounded-3xl border border-border bg-surface p-4 text-sm outline-none transition focus:ring-2 focus:ring-[color:var(--color-ring)]"
           />
         </div>
 
@@ -146,49 +164,49 @@ export function AddNoteSheet() {
         </div>
 
         <div>
-           <div className="flex items-center gap-2 mb-2">
-             <Button
-               variant="secondary"
-               size="sm"
-               className="gap-2"
-               onClick={() => fileInputRef.current?.click()}
-               disabled={uploading}
-             >
-               <Paperclip className="h-4 w-4" />
-               {uploading ? "Uploading..." : "Attach File"}
-             </Button>
-             <input
-               type="file"
-               ref={fileInputRef}
-               className="hidden"
-               onChange={handleFileSelect}
-               accept="image/*,application/pdf,text/*" 
-             />
-           </div>
-           
-           {file && (
-             <div className="flex items-center gap-2 text-sm bg-surface-solid border border-border px-3 py-2 rounded-lg">
-               <span className="truncate max-w-[200px]">{file.name}</span>
-               {uploading ? (
-                 <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />
-               ) : (
-                 <button 
-                   onClick={(e) => {
-                     e.stopPropagation();
-                     setFile(null);
-                     setAttachmentUrl(null);
-                     if (fileInputRef.current) fileInputRef.current.value = "";
-                   }}
-                   className="text-muted-foreground hover:text-foreground"
-                 >
-                    <X className="h-3 w-3" />
-                 </button>
-               )}
-             </div>
-           )}
+          <div className="flex items-center gap-2 mb-2">
+            <Button
+              variant="secondary"
+              size="sm"
+              className="gap-2"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploading}
+            >
+              <Paperclip className="h-4 w-4" />
+              {uploading ? "Uploading..." : "Attach File"}
+            </Button>
+            <input
+              type="file"
+              ref={fileInputRef}
+              className="hidden"
+              onChange={handleFileSelect}
+              accept="image/*,application/pdf,text/*"
+            />
+          </div>
+
+          {file && (
+            <div className="flex items-center gap-2 text-sm bg-surface border border-border px-3 py-2 rounded-lg">
+              <span className="truncate max-w-[200px]">{file.name}</span>
+              {uploading ? (
+                <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />
+              ) : (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setFile(null);
+                    setAttachmentUrl(null);
+                    if (fileInputRef.current) fileInputRef.current.value = "";
+                  }}
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  <X className="h-4 w-4 cursor-pointer" />
+                </button>
+              )}
+            </div>
+          )}
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        {/* <div className="flex flex-wrap items-center gap-2">
           {tags.length ? (
             tags.map((t) => (
               <span
@@ -203,47 +221,58 @@ export function AddNoteSheet() {
               No tags yet.
             </div>
           )}
-        </div>
+        </div> */}
+      </div>
 
+      <div className="border-t border-border p-5 bg-surface-solid">
         <div className="flex items-center justify-between gap-3">
-          <Button variant="secondary" onClick={close}>
-            Close
-          </Button>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 w-full">
             <Button
               variant="secondary"
+              className="flex-1"
               onClick={async () => {
                 setGenerating(true);
                 try {
-                  const res = await fetch("/api/ai/summarize", {
+                  const res = await fetch("/api/ai/rewrite", {
                     method: "POST",
                     headers: { "content-type": "application/json" },
                     body: JSON.stringify({ text: content || title }),
                   });
-                  const data = (await res.json()) as { tags?: string[] };
-                  setTags(data.tags ?? ["ai", "draft"]);
+                  const data = (await res.json()) as { answer?: string };
+                  if (data.answer) {
+                    setContent(data.answer);
+                  }
                 } finally {
                   setGenerating(false);
                 }
               }}
               disabled={generating}
             >
-              <Wand2 className="h-4 w-4" />
-              {generating ? "Generating…" : "Generate Tags"}
+              <Wand2 className="h-4 w-4 mr-2" />
+              {generating ? "Rewriting…" : "Rewrite with AI"}
             </Button>
             <Button
-              onClick={() => {
-                saveNote(title, content, type, tags, attachmentUrl, file?.name);
-                close();
-                reset();
+              className="flex-1"
+              onClick={async () => {
+                setSaving(true);
+                try {
+                  const success = await saveNote(title, content, type, tags, attachmentUrl, file?.name);
+                  if (success) {
+                    onSave?.();
+                    close();
+                    reset();
+                  }
+                } finally {
+                  setSaving(false);
+                }
               }}
-              disabled={!title.trim() && !content.trim()}
+              disabled={!title.trim() && !content.trim() || saving}
             >
-              Save
+              {saving ? "Saving..." : "Save"}
             </Button>
           </div>
         </div>
       </div>
-    </Sheet>
+    </aside>
   );
 }

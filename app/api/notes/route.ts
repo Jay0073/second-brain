@@ -24,9 +24,10 @@ export async function POST(req: Request) {
     }
 
     // Parallelize the AI work for speed
+    const userName = session.user.user_metadata?.full_name?.split(" ")[0] || "Friend";
     const [embedding, aiResponse] = await Promise.all([
       generateEmbedding(content),
-      generateSummaryAndTags(content)
+      generateSummaryAndTags(content, userName)
     ]);
 
     // Insert into Supabase (RLS uses auth.uid())

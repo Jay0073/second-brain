@@ -10,31 +10,36 @@ export async function generateEmbedding(text: string) {
 }
 
 // 2. Generate Summary & Tags (The intelligent synthesis)
-export async function generateSummaryAndTags(content: string) {
+export async function generateSummaryAndTags(content: string, userName?: string | null) {
   const model = genAI.getGenerativeModel({ model: "models/gemma-3-4b-it" });
-  
+
   const prompt = `
-    Analyze the following note content.
-    1. Create a concise 1-sentence summary.
-    2. Extract 3-5 relevant hashtags (keywords).
+    You are ${userName ? userName + "'s" : "the user's"} Second Brain. 
+    Analyze the following note content written by ${userName || "the user"}.
+
+     Your goal is to ensure no detail is lost.
+    1. Write a summary in the FIRST PERSON ACTIVE VOICE (e.g., "I went to...", "I read...", "I thought about..."). 
+       - Assume the user wrote the note, so "I" refers to the user.
+       - Keep the summary simple and preserve the original intent.
+    2. Extract 2-3 relevant hashtags (keywords).
     
     Return ONLY a JSON object:
     {
-      "summary": "The summary text...",
+      "summary": "the detailed first-person summary",
       "tags": ["tag1", "tag2", "tag3"],
       "title": "A short generated title if one wasn't provided"
     }
     
     Note Content:
-    "${content.substring(0, 1000)}" 
+    "${content.substring(0, 5000)}" 
   `;
 
   const result = await model.generateContent(prompt);
   const response = result.response;
   const text = response.text();
-  
+
   // Clean up markdown code blocks if Gemini adds them
   const jsonString = text.replace(/```json|```/g, "").trim();
-  
+
   return JSON.parse(jsonString);
 }

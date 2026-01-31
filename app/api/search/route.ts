@@ -8,7 +8,7 @@ type FilterState = {
   sort?: "date" | "relevance";
 };
 
-type NoteRow = { tags?: string[]; type?: string; created_at?: string; [key: string]: unknown };
+type NoteRow = { tags?: string[]; type?: string; created_at?: string;[key: string]: unknown };
 
 export async function POST(req: Request) {
   try {
@@ -27,9 +27,9 @@ export async function POST(req: Request) {
     const hasQuery = query && query.trim().length > 0;
     const sortBy = filterState.sort ?? "date";
 
-    const typeFilter = (filterState.types && filterState.types.length > 0) 
-    ? filterState.types[0].toLowerCase() 
-    : null;
+    const typeFilter = (filterState.types && filterState.types.length > 0)
+      ? filterState.types[0].toLowerCase()
+      : null;
 
     // ---------------------------------------------------------
     // SCENARIO 1: NO SEARCH QUERY (Just browsing/filtering)
@@ -60,7 +60,7 @@ export async function POST(req: Request) {
         });
       }
 
-      return NextResponse.json(results.slice(0, 20));
+      return NextResponse.json(results.slice(0, 50));
     }
 
     // ---------------------------------------------------------
@@ -73,7 +73,7 @@ export async function POST(req: Request) {
       {
         query_embedding: embedding,
         match_threshold: 0.3,
-        match_count: 20, // Fetch more to allow for filtering
+        match_count: 50, // Fetch more to allow for filtering
         filter_type: typeFilter,
       }
     );
@@ -81,6 +81,28 @@ export async function POST(req: Request) {
     if (vectorError) throw vectorError;
 
     let filtered = vectorResults ?? [];
+
+    // Fetch full note details to ensure we have file_url and file_name
+    // (The RPC function 'match_notes' might not return all columns)
+    if (filtered.length > 0) {
+      const ids = filtered.map((n: any) => n.id);
+      const { data: fullNotes } = await supabase
+        .from("notes")
+        .select("*")
+        .in("id", ids);
+
+      if (fullNotes) {
+        // Create a map for quick lookup
+        const fullNotesMap = new Map(fullNotes.map((n) => [n.id, n]));
+
+        // Map over the original vector results to preserve order (relevance)
+        // and merge with full note data
+        filtered = filtered.map((item: any) => ({
+          ...item,
+          ...(fullNotesMap.get(item.id) || {}),
+        }));
+      }
+    }
 
     // 1. Apply Type Filter
     if (filterState.types && filterState.types.length > 0) {

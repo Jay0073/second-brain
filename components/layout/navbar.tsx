@@ -14,14 +14,35 @@ export function Navbar({ className }: { className?: string }) {
   const openAddNote = useUiStore((s) => s.openAddNote);
   const { user, loading, signOut } = useAuth();
   const [avatarOpen, setAvatarOpen] = React.useState(false);
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
+  const triggerRef = React.useRef<HTMLButtonElement>(null);
+
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        avatarOpen &&
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node) &&
+        triggerRef.current &&
+        !triggerRef.current.contains(event.target as Node)
+      ) {
+        setAvatarOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [avatarOpen]);
 
   const initials = user?.user_metadata?.full_name
     ? String(user.user_metadata.full_name)
-        .split(/\s+/)
-        .map((s) => s[0])
-        .join("")
-        .slice(0, 2)
-        .toUpperCase()
+      .split(/\s+/)
+      .map((s) => s[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase()
     : user?.email
       ? String(user.email).slice(0, 2).toUpperCase()
       : "?";
@@ -42,40 +63,41 @@ export function Navbar({ className }: { className?: string }) {
             <BrainCircuit className="h-5 w-5" />
           </span>
           <div className="leading-tight">
-            <div className="text-sm font-semibold tracking-tight">
-              Second Brain
-            </div>
-            <div className="text-xs text-[color:var(--color-muted)]">
-              Infrastructure for thought
+            <div className="text-3xl font-sans font-extrabold tracking-tighter text-foreground">
+              Second<span className="text-primary">Brain</span>
             </div>
           </div>
         </Link>
 
         <nav className="flex items-center gap-2">
           <Link
+            href="/"
+            className="hidden rounded-full px-3 py-2 text-m text-[color:var(--color-muted-foreground)] transition hover:bg-surface hover:text-foreground sm:inline-flex"
+          >
+            Home
+          </Link>
+          <Link
             href="/dashboard"
-            className="hidden rounded-full px-3 py-2 text-sm text-[color:var(--color-muted-foreground)] transition hover:bg-surface hover:text-foreground sm:inline-flex"
+            className="hidden rounded-full px-3 py-2 text-m text-[color:var(--color-muted-foreground)] transition hover:bg-surface hover:text-foreground sm:inline-flex"
           >
             Dashboard
           </Link>
-          <ThemeToggle />
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={openAddNote}
-            className="hidden md:inline-flex"
+          <Link
+            href="/about"
+            className="hidden rounded-full px-3 py-2 text-m text-[color:var(--color-muted-foreground)] transition hover:bg-surface hover:text-foreground sm:inline-flex"
           >
-            <Plus className="h-4 w-4" />
-            New Note
-          </Button>
+            About
+          </Link>
+          <ThemeToggle />
           {loading ? (
             <div className="h-9 w-9 animate-pulse rounded-full bg-surface" />
           ) : user ? (
             <div className="relative flex items-center gap-2">
               <button
+                ref={triggerRef}
                 type="button"
                 onClick={() => setAvatarOpen((o) => !o)}
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-accent text-accent-foreground shadow-sm transition hover:opacity-90"
+                className="flex h-9 w-9 items-center justify-center rounded-full cursor-pointer  bg-accent text-accent-foreground shadow-sm transition hover:opacity-90"
                 title={user.email ?? "Signed in"}
                 aria-label="Account menu"
                 aria-expanded={avatarOpen}
@@ -88,33 +110,29 @@ export function Navbar({ className }: { className?: string }) {
                     className="h-9 w-9 rounded-full object-cover"
                   />
                 ) : (
-                  <span className="text-xs font-medium">{initials}</span>
+                  <span className="text-m font-medium">{initials}</span>
                 )}
               </button>
               {avatarOpen ? (
-                <>
-                  <div
-                    className="fixed inset-0 z-40"
-                    aria-hidden
-                    onClick={() => setAvatarOpen(false)}
-                  />
-                  <div className="absolute right-0 top-full z-50 mt-2 w-48 rounded-2xl border border-border bg-surface-solid py-2 shadow-[var(--shadow-elevated)]">
-                    <div className="border-b border-border px-3 py-2 text-xs text-[color:var(--color-muted-foreground)]">
-                      {user.email}
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setAvatarOpen(false);
-                        signOut();
-                      }}
-                      className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-foreground hover:bg-surface"
-                    >
-                      <LogOut className="h-4 w-4" />
-                      Sign out
-                    </button>
+                <div
+                  ref={dropdownRef}
+                  className="absolute right-0 top-full z-50 mt-2 w-48 rounded-2xl border border-border bg-surface-solid py-2 shadow-[var(--shadow-elevated)]"
+                >
+                  <div className="border-b border-border px-3 py-2 text-xs text-[color:var(--color-muted-foreground)]">
+                    {user.email}
                   </div>
-                </>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAvatarOpen(false);
+                      signOut();
+                    }}
+                    className="flex w-full items-center gap-2 px-3 py-2 cursor-pointer text-left text-sm text-foreground hover:bg-surface"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Sign out
+                  </button>
+                </div>
               ) : null}
             </div>
           ) : (

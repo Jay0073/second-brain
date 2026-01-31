@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { LogIn, UserPlus } from "lucide-react";
 import { Modal } from "@/components/ui/modal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -58,33 +59,36 @@ export function LoginModal() {
       description="Sign in or sign up with email."
     >
       <form onSubmit={handleSubmit}>
-        <div className="flex items-center gap-2 rounded-full border border-border bg-surface p-1">
+        <div className="flex items-center gap-1 rounded-full border border-border bg-surface p-1">
           <button
             type="button"
-            className={cn(
-              "flex-1 rounded-full px-3 py-2 text-sm font-medium transition",
-              tab === "login"
-                ? "bg-surface-solid text-foreground shadow-sm"
-                : "text-[color:var(--color-muted-foreground)] hover:text-foreground",
-            )}
             onClick={() => setTab("login")}
+            className={cn(
+              "flex flex-1 items-center justify-center gap-2 cursor-pointer rounded-full px-3 py-2 text-sm font-medium transition",
+              tab === "login"
+                ? "bg-[color:var(--color-toggle-thumb)] text-[color:var(--color-background)] shadow-sm"
+                : "text-[color:var(--color-muted-foreground)] hover:text-foreground"
+            )}
+            aria-pressed={tab === "login"}
           >
+            <LogIn className="h-4 w-4" />
             Login
           </button>
           <button
             type="button"
-            className={cn(
-              "flex-1 rounded-full px-3 py-2 text-sm font-medium transition",
-              tab === "signup"
-                ? "bg-surface-solid text-foreground shadow-sm"
-                : "text-[color:var(--color-muted-foreground)] hover:text-foreground",
-            )}
             onClick={() => setTab("signup")}
+            className={cn(
+              "flex flex-1 items-center justify-center gap-2 cursor-pointer rounded-full px-3 py-2 text-sm font-medium transition",
+              tab === "signup"
+                ? "bg-[color:var(--color-toggle-thumb)] text-[color:var(--color-background)] shadow-sm"
+                : "text-[color:var(--color-muted-foreground)] hover:text-foreground"
+            )}
+            aria-pressed={tab === "signup"}
           >
+            <UserPlus className="h-4 w-4" />
             Signup
           </button>
         </div>
-
         <div className="mt-5 space-y-3">
           {tab === "signup" ? (
             <Input
@@ -105,23 +109,27 @@ export function LoginModal() {
           <Input
             placeholder="Password"
             type="password"
-            autoComplete={tab === "signup" ? "new-password" : "current-password"}
+            autoComplete={
+              tab === "signup" ? "new-password" : "current-password"
+            }
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
         </div>
-
         {error ? (
           <p className="mt-3 text-sm text-red-600 dark:text-red-400">{error}</p>
         ) : null}
-
         <div className="mt-6 flex items-center justify-between gap-3">
           <Button type="button" variant="secondary" onClick={close}>
             Cancel
           </Button>
           <Button type="submit" disabled={submitting}>
-            {submitting ? "Please wait…" : tab === "login" ? "Login" : "Create account"}
+            {submitting
+              ? "Please wait…"
+              : tab === "login"
+                ? "Login"
+                : "Create account"}
           </Button>
         </div>
       </form>

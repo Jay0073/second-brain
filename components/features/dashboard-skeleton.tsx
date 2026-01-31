@@ -13,7 +13,15 @@ function SkeletonBlock({ className }: { className?: string }) {
   );
 }
 
-export function DashboardSkeleton() {
+export function DashboardSkeleton({ mode = "grid" }: { mode?: "grid" | "graph" }) {
+  if (mode === "graph") {
+    return (
+      <div className="h-[600px] w-full rounded-3xl border border-border bg-surface p-5">
+        <div className="h-full w-full animate-pulse rounded-2xl bg-[color-mix(in_oklab,var(--foreground)_5%,transparent)]" />
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {Array.from({ length: 6 }).map((_, i) => (

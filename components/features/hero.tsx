@@ -7,6 +7,7 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useUiStore } from "@/lib/store/uiStore";
+import { useAuth } from "@/components/auth-provider";
 
 function FloatingNote({
   title,
@@ -48,6 +49,7 @@ function FloatingNote({
 
 export function Hero() {
   const openAddNote = useUiStore((s) => s.openAddNote);
+  // const { user } = useAuth();
   const { scrollY } = useScroll();
 
   const y1 = useTransform(scrollY, [0, 600], [0, 80]);
@@ -57,8 +59,9 @@ export function Hero() {
   return (
     <section className="relative overflow-hidden">
       <div className="absolute inset-0">
-        <div className="absolute -left-20 -top-28 h-80 w-80 rounded-full bg-[color-mix(in_oklab,var(--accent)_20%,transparent)] blur-3xl" />
-        <div className="absolute -bottom-28 -right-24 h-96 w-96 rounded-full bg-[color-mix(in_oklab,var(--foreground)_6%,transparent)] blur-3xl" />
+        <div className="absolute -left-20 -top-28 h-80 w-80 rounded-full bg-[color-mix(in_oklab,var(--accent)_20%,transparent)] blur-3xl aurora-blob" />
+        <div className="absolute right-70 top-28 h-100 w-100 rounded-full bg-[color-mix(in_oklab,var(--accent)_20%,transparent)] blur-3xl aurora-blob" />
+        <div className="absolute -bottom-28 -right-24 h-96 w-96 rounded-full bg-[color-mix(in_oklab,var(--foreground)_6%,transparent)] blur-3xl aurora-blob" />
       </div>
 
       <div className="relative mx-auto grid max-w-6xl grid-cols-1 gap-10 px-4 py-16 md:grid-cols-2 md:py-24">
@@ -67,8 +70,10 @@ export function Hero() {
             <Sparkles className="h-4 w-4 text-[color:var(--accent)]" />
             AI-ready notes, built to scale
           </div>
-
-          <h1 className="mt-5 text-4xl font-semibold tracking-tight md:text-5xl">
+          {/* <h3 className="mt-5 text-4xl font-semibold tracking-tight md:text-5xl">
+            {user ? `Good ${new Date().getHours() < 12 ? "morning" : "evening"}, ${user.user_metadata?.full_name?.split(" ")[0] ?? "friend"}.` : "Your Infrastructure for Thought."}
+          </h3> */}
+          <h1 className="mt-5 text-4xl font-semibold tracking-tight md:text-6xl">
             Your Infrastructure for Thought.
           </h1>
           <p className="mt-4 max-w-xl text-base leading-7 text-[color:var(--color-muted-foreground)] md:text-lg">
@@ -77,9 +82,11 @@ export function Hero() {
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Button onClick={openAddNote}>
+            <Link href="/dashboard">
+            <Button>
               New note <ArrowRight className="h-4 w-4" />
             </Button>
+            </Link>
             <Link href="/dashboard">
               <Button variant="secondary">Open dashboard</Button>
             </Link>

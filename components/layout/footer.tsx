@@ -22,6 +22,12 @@ export function Footer() {
           >
             Dashboard
           </Link>
+          <Link
+            href="/about"
+            className="text-[color:var(--color-muted-foreground)] hover:text-foreground"
+          >
+            About
+          </Link>
         </div>
       </div>
     </footer>

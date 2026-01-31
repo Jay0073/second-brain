@@ -58,7 +58,7 @@ export function Sheet({
               aria-label="Close"
               onClick={() => onOpenChange(false)}
             >
-              <X className="h-4 w-4" />
+              <X className="h-4 w-4 cursor-pointer" />
             </button>
           </div>
           <div className="h-[calc(100%-73px)] overflow-auto px-6 py-6">

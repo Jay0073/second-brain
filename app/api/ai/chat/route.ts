@@ -35,19 +35,24 @@ export async function POST(req: Request) {
     // 3. Ask Gemini (The "Synthesis" phase)
     const model = genAI.getGenerativeModel({ model: "models/gemma-3-4b-it" });
 
+    const userName = session.user.user_metadata?.full_name?.split(" ")[0];
+
     const prompt = `
-      You are the user's Second Brain. Answer their question based ONLY on the context provided below.
-      If the answer isn't in the context, say "I don't have that information in my memory yet."
+      You are ${userName ? userName + "'s" : "the user's"} Second Brain. 
+      Answer their question based ONLY on the context provided below.
       
-      Keep the tone conversational, helpful, and concise. 
-      Refer to the notes as "your notes" or "you wrote".
+      tone & Style:
+      - Addressed the user directly as "you".
+      - Be conversational and warm.
+      - If the answer isn't in the context, say "I don't recall that right now." but be nice.
+      - Use the context to formulate a response that feels like a memory recall.
       
       ---
       Context from Memory:
       ${contextText ?? ""}
       ---
       
-      User Question: ${message ?? ""}
+      ${userName ? userName + "'s" : "User"} Question: ${message ?? ""}
     `;
 
     const result = await model.generateContent(prompt);

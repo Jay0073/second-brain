@@ -50,8 +50,12 @@ export function FilterModal({
         if (!res.ok) return;
         const data = (await res.json()) as { tags?: TagObj[] };
         if (!cancelled) {
-          setAvailableTags(Array.isArray(data.tags) ? data.tags : []);
-          // console.log(data.tags);
+          const rawTags = Array.isArray(data.tags) ? data.tags : [];
+          // User requested: "only show tags which are not unique or whose tagObj.count > 1"
+          // Assuming the API returns objects { tag: string, count: number }
+          // We filter for count > 1
+          const filtered = rawTags.filter(t => t.count > 1);
+          setAvailableTags(filtered);
         }
       } catch {
         // ignore

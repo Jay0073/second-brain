@@ -6,6 +6,7 @@
   --foreground: #1a1a1a; /* dark charcoal */
   --surface: rgba(255, 255, 255, 0.72);
   --surface-solid: #ffffff;
+  --toggle-thumb: #1a1a1a;
   --border: rgba(26, 26, 26, 0.12);
 
   --accent: #282828; /* ash black */
@@ -23,6 +24,7 @@
   --color-foreground: var(--foreground);
   --color-surface: var(--surface);
   --color-surface-solid: var(--surface-solid);
+  --color-toggle-thumb: var(--toggle-thumb);
   --color-border: var(--border);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
@@ -40,6 +42,7 @@ html[data-theme="dark"] {
   --foreground: #e5e5e5; /* off-white */
   --surface: rgba(26, 26, 26, 0.62);
   --surface-solid: #1a1a1a;
+  --toggle-thumb: #22d3ee;
   --border: rgba(229, 229, 229, 0.12);
 
   --accent: #22d3ee; /* electric cyan */
@@ -65,4 +68,56 @@ body {
 
 ::selection {
   background: color-mix(in oklab, var(--accent) 35%, transparent);
+}
+
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+html {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+html::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Opera */
+}
+
+@keyframes aurora-breath {
+  0% {
+    transform: scale(1) translateY(0px) translateX(0px) rotate(0deg);
+    filter: blur(100px) brightness(1);
+    opacity: 1;
+  }
+  30% {
+    transform: scale(1.08) translateY(-12px) translateX(8px) rotate(2deg);
+    filter: blur(110px) brightness(1.08);
+    opacity: 0.95;
+  }
+  60% {
+    transform: scale(0.9) translateY(10px) translateX(-10px) rotate(-2deg);
+    filter: blur(90px) brightness(0.96);
+    opacity: 0.93;
+  }
+  100% {
+    transform: scale(1) translateY(0px) translateX(0px) rotate(0deg);
+    filter: blur(100px) brightness(1);
+    opacity: 1;
+  }
+}
+
+.aurora-blob {
+  animation: aurora-breath 7s ease-in-out infinite;
+  will-change: transform, filter, opacity;
 }
