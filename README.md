@@ -84,6 +84,9 @@ graph LR
 ### 🌐 Live Demo
 Experience the platform here: [**second-brain-gx2a.onrender.com**](https://second-brain-gx2a.onrender.com)
 
+If you wish to skip the signup! Use our pre-populated guest account to explore the "Second Brain" system immediately.
+ - email: `demo@altibbe.com`
+ - password: `123456`
 ---
 
 ## 🚀 Getting Started
