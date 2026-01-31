@@ -4,7 +4,7 @@ import * as React from "react";
 import { Filter, Search, LayoutGrid, Network } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Modal } from "@/components/ui/modal";
+// import { Modal } from "@/components/ui/modal";
 import { DashboardSkeleton } from "@/components/features/dashboard-skeleton";
 import { NoteCard } from "@/components/features/note-card";
 import { BrainGraph3D } from "@/components/features/brain-graph";
@@ -13,17 +13,17 @@ import { AddNoteSidebar } from "@/components/features/add-note-sidebar";
 import { useUiStore } from "@/lib/store/uiStore";
 import { useBrain } from "@/hooks/useBrain";
 import { useAuth } from "@/components/auth-provider";
-import type { BrainNote } from "@/hooks/useBrain";
+// import type { BrainNote } from "@/hooks/useBrain";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "short",
-    day: "2-digit",
-  });
-}
+// function formatDate(iso: string) {
+//   return new Date(iso).toLocaleDateString(undefined, {
+//     year: "numeric",
+//     month: "short",
+//     day: "2-digit",
+//   });
+// }
 
 export default function DashboardPage() {
   const openAddNote = useUiStore((s) => s.openAddNote);
@@ -40,7 +40,7 @@ export default function DashboardPage() {
     handleResetFilters,
     refreshNotes,
   } = useBrain();
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
   const [viewMode, setViewMode] = React.useState<"grid" | "graph">("grid");
 
   // Re-fetch notes when user logs in

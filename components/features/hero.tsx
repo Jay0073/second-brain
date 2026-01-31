@@ -7,7 +7,7 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useUiStore } from "@/lib/store/uiStore";
-import { useAuth } from "@/components/auth-provider";
+// import { useAuth } from "@/components/auth-provider";
 
 function FloatingNote({
   title,
@@ -48,7 +48,7 @@ function FloatingNote({
 }
 
 export function Hero() {
-  const openAddNote = useUiStore((s) => s.openAddNote);
+  // const openAddNote = useUiStore((s) => s.openAddNote);
   // const { user } = useAuth();
   const { scrollY } = useScroll();
 
@@ -83,9 +83,9 @@ export function Hero() {
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Link href="/dashboard">
-            <Button>
-              New note <ArrowRight className="h-4 w-4" />
-            </Button>
+              <Button>
+                New note <ArrowRight className="h-4 w-4" />
+              </Button>
             </Link>
             <Link href="/dashboard">
               <Button variant="secondary">Open dashboard</Button>

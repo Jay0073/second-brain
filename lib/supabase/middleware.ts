@@ -24,8 +24,8 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  const { data } = await supabase.auth.getSession();
-  const session = data?.session;
+  // const { data } = await supabase.auth.getSession();
+  // const session = data?.session;
 
   // Protect /dashboard: redirect to home if no session
   // if (request.nextUrl.pathname.startsWith("/dashboard") && !session) {

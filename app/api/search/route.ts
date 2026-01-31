@@ -85,11 +85,11 @@ export async function POST(req: Request) {
     // Fetch full note details to ensure we have file_url and file_name
     // (The RPC function 'match_notes' might not return all columns)
     if (filtered.length > 0) {
-      const ids = filtered.map((n: any) => n.id);
+      const ids = (filtered as NoteRow[]).map((n) => n.id);
       const { data: fullNotes } = await supabase
         .from("notes")
         .select("*")
-        .in("id", ids);
+        .in("id", ids as string[]);
 
       if (fullNotes) {
         // Create a map for quick lookup
@@ -97,7 +97,7 @@ export async function POST(req: Request) {
 
         // Map over the original vector results to preserve order (relevance)
         // and merge with full note data
-        filtered = filtered.map((item: any) => ({
+        filtered = (filtered as NoteRow[]).map((item) => ({
           ...item,
           ...(fullNotesMap.get(item.id) || {}),
         }));

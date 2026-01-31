@@ -3,19 +3,19 @@
 import React, { useRef } from "react";
 import Link from "next/link";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
-import { 
-  Brain, 
-  Layers, 
-  Sparkles, 
-  ShieldCheck, 
-  ArrowRightLeft, 
-  Workflow, 
-  Database, 
-  Search, 
+import {
+  Brain,
+  Layers,
+  Sparkles,
+  ShieldCheck,
+  ArrowRightLeft,
+  Workflow,
+  Database,
+  Search,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import Image from "next/image"; // Keep for when you add real images
+// import Image from "next/image"; // Keep for when you add real images
 
 // --- Utility Components ---
 
@@ -23,7 +23,7 @@ import Image from "next/image"; // Keep for when you add real images
  * A reusable placeholder for where images/videos should go.
  * It describes the visual intent.
  */
-function VisualPlaceholder({ title, description, icon: Icon }: { title: string; description: string; icon: any }) {
+function VisualPlaceholder({ title, description, icon: Icon }: { title: string; description: string; icon: React.ElementType }) {
   return (
     <div className="group relative flex h-full min-h-[320px] w-full flex-col items-center justify-center overflow-hidden rounded-2xl border border-dashed border-border bg-surface-solid/50 p-8 text-center transition-colors hover:bg-surface-solid/80">
       <div className="z-10 flex flex-col items-center">
@@ -73,7 +73,7 @@ export default function AboutPage() {
 
   return (
     <div ref={containerRef} className="relative overflow-hidden text-foreground">
-      
+
       {/* 1. Background Blobs (Matches Hero.tsx) */}
       <div className="absolute inset-0 pointer-events-none fixed">
         <div className="absolute -left-[10%] top-[10%] h-[500px] w-[500px] rounded-full bg-[color-mix(in_oklab,var(--accent)_15%,transparent)] blur-[100px] aurora-blob" />
@@ -81,7 +81,7 @@ export default function AboutPage() {
       </div>
 
       <div className="relative mx-auto max-w-6xl px-4 pb-12 pt-16 md:pt-24">
-        
+
         {/* 2. Intro Section */}
         <section className="mx-auto max-w-3xl text-center mb-24">
           <motion.div
@@ -93,8 +93,8 @@ export default function AboutPage() {
               Our Vision
             </Badge>
             <h1 className="text-4xl font-semibold tracking-tight md:text-6xl mb-6">
-              You aren't losing your memory. <br />
-              <span className="text-muted-foreground">You're missing a system.</span>
+              You aren&apos;t losing your memory. <br />
+              <span className="text-muted-foreground">You&apos;re missing a system.</span>
             </h1>
             <p className="text-lg text-muted-foreground leading-relaxed">
               The world is drowning in information. Free your biological brain from the burden of remembering everything. Let it focus on creating, not storing.
@@ -108,8 +108,8 @@ export default function AboutPage() {
             <div className="order-2 md:order-1 space-y-6">
               <h2 className="text-3xl font-semibold tracking-tight">From Chaos to Cathedral</h2>
               <p className="text-muted-foreground leading-7">
-                Most notes apps are warehouses—static, dusty, and hard to search. 
-                We are building a <strong>digital cathedral</strong> for your thoughts. 
+                Most notes apps are warehouses—static, dusty, and hard to search.
+                We are building a <strong>digital cathedral</strong> for your thoughts.
                 Where every idea is connected, every insight is surfaced by AI, and nothing gets lost in the noise.
               </p>
               <div className="flex flex-col gap-4">
@@ -119,7 +119,7 @@ export default function AboutPage() {
                   </div>
                   <div>
                     <strong className="block text-sm font-medium">Traditional Way</strong>
-                    <span className="text-sm text-muted-foreground">Folders, manual tagging, "Where did I put that?"</span>
+                    <span className="text-sm text-muted-foreground">Folders, manual tagging, &quot;Where did I put that?&quot;</span>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -133,9 +133,9 @@ export default function AboutPage() {
                 </div>
               </div>
             </div>
-            
+
             <motion.div style={{ y: ySlow }} className="order-1 md:order-2">
-              <VisualPlaceholder 
+              <VisualPlaceholder
                 title="Visual: The Knowledge Graph"
                 description="A video or GIF showing nodes connecting in 3D space (like the dashboard graph), transitioning from a messy pile to a beautiful constellation."
                 icon={Workflow}
@@ -150,27 +150,27 @@ export default function AboutPage() {
             <div className="text-center mb-16">
               <h2 className="text-3xl font-semibold mb-4">Built on Proven Frameworks</h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                We didn't invent note-taking. We automated the best methodologies so you don't have to maintain them manually.
+                We didn&apos;t invent note-taking. We automated the best methodologies so you don&apos;t have to maintain them manually.
               </p>
             </div>
           </FadeInSection>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { 
-                title: "C.O.D.E.", 
-                desc: "Capture, Organize, Distill, Express. The lifecycle of an idea.", 
-                color: "bg-blue-500/10 text-blue-500" 
+              {
+                title: "C.O.D.E.",
+                desc: "Capture, Organize, Distill, Express. The lifecycle of an idea.",
+                color: "bg-blue-500/10 text-blue-500"
               },
-              { 
-                title: "P.A.R.A.", 
-                desc: "Projects, Areas, Resources, Archives. A universal system for organization.", 
-                color: "bg-purple-500/10 text-purple-500" 
+              {
+                title: "P.A.R.A.",
+                desc: "Projects, Areas, Resources, Archives. A universal system for organization.",
+                color: "bg-purple-500/10 text-purple-500"
               },
-              { 
-                title: "Just-in-Time", 
-                desc: "Surface information exactly when you need it, not when you file it.", 
-                color: "bg-orange-500/10 text-orange-500" 
+              {
+                title: "Just-in-Time",
+                desc: "Surface information exactly when you need it, not when you file it.",
+                color: "bg-orange-500/10 text-orange-500"
               }
             ].map((item, i) => (
               <FadeInSection delay={i * 0.1} key={i}>
@@ -195,14 +195,14 @@ export default function AboutPage() {
           <div className="rounded-3xl border border-border bg-gradient-to-b from-surface to-surface-solid p-8 md:p-16 mb-32 relative overflow-hidden">
             {/* Decorative background glow */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-1/2 bg-accent/5 blur-[120px] rounded-full pointer-events-none" />
-            
+
             <div className="relative z-10 flex flex-col md:flex-row gap-12 items-center">
               <div className="flex-1 space-y-6">
                 <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium">
                   <Sparkles className="h-3 w-3 text-accent" />
                   The AI Advantage
                 </div>
-                <h2 className="text-3xl md:text-4xl font-semibold">It understands, <br/>so you don't have to file.</h2>
+                <h2 className="text-3xl md:text-4xl font-semibold">It understands, <br />so you don&apos;t have to file.</h2>
                 <ul className="space-y-4">
                   {[
                     "Semantic Search: Find 'that recipe with tomatoes' without the exact keyword.",
@@ -218,7 +218,7 @@ export default function AboutPage() {
               </div>
               <div className="flex-1 w-full">
                 <motion.div style={{ y: yFast }}>
-                  <VisualPlaceholder 
+                  <VisualPlaceholder
                     title="Visual: AI Chat / Search"
                     description="A clean UI mockup showing a user typing a natural language query and the system surfacing relevant note cards instantly."
                     icon={Search}
@@ -233,36 +233,36 @@ export default function AboutPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
           <FadeInSection>
             <div className="h-full rounded-2xl border border-border bg-surface/50 p-8">
-               <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                 <ArrowRightLeft className="h-5 w-5 text-muted-foreground" />
-                 Seamless Integrations
-               </h3>
-               <p className="text-muted-foreground text-sm mb-6">
-                 Your brain doesn't live in a silo. Neither should your notes. We sync with the tools you already use.
-               </p>
-               {/* Integration Icons Grid */}
-               <div className="grid grid-cols-3 gap-4">
-                  {["Notion", "Slack", "Drive", "Linear", "Obsidian", "Chrome"].map((tool) => (
-                    <div key={tool} className="flex flex-col items-center justify-center p-4 rounded-xl bg-surface-solid border border-border/50">
-                      {/* Replace with actual SVGs later */}
-                      <div className="h-6 w-6 rounded-full bg-foreground/10 mb-2" />
-                      <span className="text-[10px] font-medium">{tool}</span>
-                    </div>
-                  ))}
-               </div>
+              <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                <ArrowRightLeft className="h-5 w-5 text-muted-foreground" />
+                Seamless Integrations
+              </h3>
+              <p className="text-muted-foreground text-sm mb-6">
+                Your brain doesn&apos;t live in a silo. Neither should your notes. We sync with the tools you already use.
+              </p>
+              {/* Integration Icons Grid */}
+              <div className="grid grid-cols-3 gap-4">
+                {["Notion", "Slack", "Drive", "Linear", "Obsidian", "Chrome"].map((tool) => (
+                  <div key={tool} className="flex flex-col items-center justify-center p-4 rounded-xl bg-surface-solid border border-border/50">
+                    {/* Replace with actual SVGs later */}
+                    <div className="h-6 w-6 rounded-full bg-foreground/10 mb-2" />
+                    <span className="text-[10px] font-medium">{tool}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </FadeInSection>
 
           <FadeInSection delay={0.2}>
             <div className="h-full rounded-2xl border border-border bg-surface/50 p-8 flex flex-col justify-center text-center md:text-left">
-               <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-green-500/10 text-green-500 self-center md:self-start">
-                 <ShieldCheck className="h-6 w-6" />
-               </div>
-               <h3 className="text-xl font-semibold mb-2">Privacy First</h3>
-               <p className="text-muted-foreground text-sm leading-relaxed">
-                 Your thoughts are private. We use <strong>AES-256 encryption</strong> at rest and TLS in transit. 
-                 Our business model is simple: you pay us, we provide a service. We do not sell your data or train public models on your private notes.
-               </p>
+              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-green-500/10 text-green-500 self-center md:self-start">
+                <ShieldCheck className="h-6 w-6" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Privacy First</h3>
+              <p className="text-muted-foreground text-sm leading-relaxed">
+                Your thoughts are private. We use <strong>AES-256 encryption</strong> at rest and TLS in transit.
+                Our business model is simple: you pay us, we provide a service. We do not sell your data or train public models on your private notes.
+              </p>
             </div>
           </FadeInSection>
         </div>
@@ -274,8 +274,8 @@ export default function AboutPage() {
             <p className="text-muted-foreground mb-8">Join the journey from information exhaustion to creative mastery.</p>
             {/* Assuming you have a Button component wrapper or use standard HTML for now */}
             <div className="flex justify-center gap-4">
-              <Link href="/dashboard"  className="px-6 py-2.5 rounded-full bg-foreground text-background font-medium hover:opacity-90 transition" >
-              Get Started
+              <Link href="/dashboard" className="px-6 py-2.5 rounded-full bg-foreground text-background font-medium hover:opacity-90 transition" >
+                Get Started
               </Link>
             </div>
           </div>

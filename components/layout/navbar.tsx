@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { BrainCircuit, LogIn, LogOut, Plus } from "lucide-react";
+import { BrainCircuit, LogIn, LogOut } from "lucide-react";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -11,7 +11,7 @@ import { useAuth } from "@/components/auth-provider";
 
 export function Navbar({ className }: { className?: string }) {
   const openLogin = useUiStore((s) => s.openLogin);
-  const openAddNote = useUiStore((s) => s.openAddNote);
+  // const openAddNote = useUiStore((s) => s.openAddNote);
   const { user, loading, signOut } = useAuth();
   const [avatarOpen, setAvatarOpen] = React.useState(false);
   const dropdownRef = React.useRef<HTMLDivElement>(null);

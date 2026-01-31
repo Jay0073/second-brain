@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Wand2, Paperclip, Loader2, X, PanelRightClose, PanelRightOpen } from "lucide-react";
+import { Wand2, Paperclip, Loader2, X, PanelRightClose } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useUiStore } from "@/lib/store/uiStore";

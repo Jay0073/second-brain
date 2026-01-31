@@ -2,8 +2,16 @@
 
 import { useMemo, useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { BrainNote } from "@/hooks/useBrain";
-import * as THREE from "three";
+// import * as THREE from "three";
+
+interface GraphNode extends BrainNote {
+  x?: number;
+  y?: number;
+  z?: number;
+  [key: string]: unknown;
+}
 
 function cosineSimilarity(a: number[], b: number[]): number {
   if (a.length !== b.length) return 0;
@@ -73,9 +81,9 @@ const getNodeColor = (note: BrainNote, isDark: boolean) => {
 
 export function BrainGraph3D({ notes }: { notes: BrainNote[] }) {
   const theme = useCurrentTheme();
-  const fgRef = useRef<any>(null);
-  const [hoveredNode, setHoveredNode] = useState<BrainNote | null>(null);
-  const [selectedNode, setSelectedNode] = useState<BrainNote | null>(null);
+  const fgRef = useRef<any>(null); // eslint-disable-line @typescript-eslint/no-explicit-any
+  const [hoveredNode, setHoveredNode] = useState<GraphNode | null>(null);
+  const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
 
@@ -83,7 +91,7 @@ export function BrainGraph3D({ notes }: { notes: BrainNote[] }) {
     if (!containerRef.current) return;
 
     const resizeObserver = new ResizeObserver((entries) => {
-      for (let entry of entries) {
+      for (const entry of entries) {
         setDimensions({
           width: entry.contentRect.width,
           height: entry.contentRect.height,
@@ -204,7 +212,7 @@ export function BrainGraph3D({ notes }: { notes: BrainNote[] }) {
         nodeLabel=""
         nodeRelSize={6}
         nodeResolution={16}
-        nodeColor={(node: any) => getNodeColor(node, isDark)}
+        nodeColor={(node: any) => getNodeColor(node as BrainNote, isDark)} // eslint-disable-line @typescript-eslint/no-explicit-any
         nodeOpacity={1}
         // --- Edges ---
         linkColor={() =>
@@ -213,7 +221,7 @@ export function BrainGraph3D({ notes }: { notes: BrainNote[] }) {
         linkWidth={1}
         linkDirectionalParticleWidth={0.1}
         // --- Interaction ---
-        onNodeClick={(node: any) => {
+        onNodeClick={(node: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
           // 1. Move camera to node
           const distance = 40;
           const distRatio = 1 + distance / Math.hypot(node.x, node.y, node.z);
@@ -233,7 +241,7 @@ export function BrainGraph3D({ notes }: { notes: BrainNote[] }) {
           setHoveredNode(null);
           isRotationActive.current = false;
         }}
-        onNodeHover={(node: any) => {
+        onNodeHover={(node: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
           document.body.style.cursor = node ? "pointer" : "auto";
           setHoveredNode(node || null);
 
@@ -299,16 +307,17 @@ export function BrainGraph3D({ notes }: { notes: BrainNote[] }) {
               <>
                 {/\.(jpg|jpeg|png|gif|webp)$/i.test(
                   (hoveredNode || selectedNode)?.file_name ??
-                    (hoveredNode || selectedNode)?.file_url ??
-                    "",
+                  (hoveredNode || selectedNode)?.file_url ??
+                  "",
                 ) ? (
                   <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-border mt-2">
-                    <img
+                    <Image
                       src={(hoveredNode || selectedNode)?.file_url || "#"}
                       alt={
                         (hoveredNode || selectedNode)?.file_name || "Attachment"
                       }
-                      className="h-full w-full object-cover"
+                      fill
+                      className="object-cover"
                     />
                   </div>
                 ) : (
