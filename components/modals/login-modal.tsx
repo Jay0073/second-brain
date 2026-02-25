@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { LogIn, UserPlus } from "lucide-react";
+import { LogIn, UserPlus, Copy, CopyCheck, InfoIcon } from "lucide-react";
 import { Modal } from "@/components/ui/modal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,6 +10,47 @@ import { useAuth } from "@/components/auth-provider";
 import { cn } from "@/lib/utils";
 
 type Tab = "login" | "signup";
+
+function DemoCredential({ label, value }: { label: string; value: string }) {
+  const [copied, setCopied] = React.useState(false);
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(value);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1200);
+  };
+
+  return (
+    <div className="flex items-center group">
+      <span
+        className={cn(
+          "px-2 py-1 rounded-md font-mono text-sm",
+          "bg-[color:var(--color-surface-solid)] border border-[color:var(--color-border)]",
+          "text-[color:var(--color-accent)]",
+        )}
+      >
+        {value}
+      </span>
+      <button
+        type="button"
+        onClick={handleCopy}
+        className={cn(
+          "ml-1 px-2 py-1 rounded transition text-xs font-medium",
+          "bg-transparent hover:bg-[color:var(--color-accent)] hover:text-[color:var(--color-accent-foreground)]",
+          "text-[color:var(--color-muted-foreground)]",
+        )}
+        aria-label={`Copy ${label.toLowerCase()}`}
+        tabIndex={0}
+      >
+        {copied ? (
+            <CopyCheck className="h-3 w-3" />
+        ) : (
+        <Copy className="h-3 w-3" />
+        )}
+      </button>
+    </div>
+  );
+}
 
 export function LoginModal() {
   const open = useUiStore((s) => s.loginOpen);
@@ -67,7 +108,7 @@ export function LoginModal() {
               "flex flex-1 items-center justify-center gap-2 cursor-pointer rounded-full px-3 py-2 text-sm font-medium transition",
               tab === "login"
                 ? "bg-[color:var(--color-toggle-thumb)] text-[color:var(--color-background)] shadow-sm"
-                : "text-[color:var(--color-muted-foreground)] hover:text-foreground"
+                : "text-[color:var(--color-muted-foreground)] hover:text-foreground",
             )}
             aria-pressed={tab === "login"}
           >
@@ -81,7 +122,7 @@ export function LoginModal() {
               "flex flex-1 items-center justify-center gap-2 cursor-pointer rounded-full px-3 py-2 text-sm font-medium transition",
               tab === "signup"
                 ? "bg-[color:var(--color-toggle-thumb)] text-[color:var(--color-background)] shadow-sm"
-                : "text-[color:var(--color-muted-foreground)] hover:text-foreground"
+                : "text-[color:var(--color-muted-foreground)] hover:text-foreground",
             )}
             aria-pressed={tab === "signup"}
           >
@@ -89,6 +130,25 @@ export function LoginModal() {
             Signup
           </button>
         </div>
+        {tab === "login" && (
+          <div
+            className={cn(
+              "mt-4 rounded-xl px-5 py-2 flex flex-col gap-2",
+              "bg-[color:var(--color-background)] shadow-sm",
+            )}
+          >
+            <div className="flex items-center gap-2 mb-1">
+              <InfoIcon className="h-4 w-4 text-blue" />
+            <span className="text-sm text-[color:var(--color-muted-foreground)]">
+              Use these credentials to log in and try out the app:
+            </span>
+            </div>
+            <div className="flex flex-col gap-2 mt-2">
+              <DemoCredential label="Email" value="demo@demo.com" />
+              <DemoCredential label="Password" value="123456" />
+            </div>
+          </div>
+        )}
         <div className="mt-5 space-y-3">
           {tab === "signup" ? (
             <Input
