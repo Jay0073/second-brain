@@ -20,7 +20,7 @@ export async function POST(req: Request) {
 
     const { data: notes } = await supabase.rpc("match_notes", {
       query_embedding: embedding,
-      match_threshold: 0.3,
+      match_threshold: 0.65,
       match_count: 5,
     });
 
