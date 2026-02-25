@@ -127,7 +127,7 @@ export function BrainGraph3D({ notes }: { notes: BrainNote[] }) {
         // Check semantic similarity of note embeddings
         if (a.embedding && b.embedding) {
           const similarity = cosineSimilarity(a.embedding, b.embedding);
-          if (similarity > 0.5) {
+          if (similarity > 0.65) {
             // Adjust threshold as needed
             links.push({ source: a.id, target: b.id });
           }
