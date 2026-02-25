@@ -82,10 +82,10 @@ graph LR
 ---
 
 ### 🌐 Live Demo
-Experience the platform here: [**second-brain-gx2a.onrender.com**](https://second-brain-gx2a.onrender.com)
+Experience the platform here: [**second-brain-eta-livid.vercel.app**](https://second-brain-eta-livid.vercel.app/)
 
 If you wish to skip the signup! Use our pre-populated guest account to explore the "Second Brain" system immediately.
- - email: `demo@altibbe.com`
+ - email: `demo@demo.com`
  - password: `123456`
 ---
 
