@@ -72,7 +72,7 @@ export async function POST(req: Request) {
       "match_notes",
       {
         query_embedding: embedding,
-        match_threshold: 0.65, // Adjust as needed
+        match_threshold: 0.5, // Adjust as needed
         match_count: 50, // Fetch more to allow for filtering
         filter_type: typeFilter,
       }
