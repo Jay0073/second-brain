@@ -4,8 +4,16 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 // 1. Generate Embeddings (The mathematical representation of the note)
 export async function generateEmbedding(text: string) {
-  const model = genAI.getGenerativeModel({ model: "text-embedding-004" });
-  const result = await model.embedContent(text);
+  const model = genAI.getGenerativeModel({ model: "gemini-embedding-001" });
+
+  const result = await model.embedContent({
+    content: { 
+      role: "user",
+      parts: [{ text }] 
+    },
+    outputDimensionality: 768,
+  } as any);
+
   return result.embedding.values;
 }
 
