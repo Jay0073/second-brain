@@ -6,13 +6,20 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 export async function generateEmbedding(text: string) {
   const model = genAI.getGenerativeModel({ model: "gemini-embedding-001" });
 
-  const result = await model.embedContent({
-    content: { 
+  const payload: {
+    content: {
+      role: string;
+      parts: Array<{ text: string }>;
+    };
+    outputDimensionality: number;
+  } = {
+    content: {
       role: "user",
-      parts: [{ text }] 
+      parts: [{ text }],
     },
     outputDimensionality: 768,
-  } as any);
+  };
+  const result = await model.embedContent(payload);
 
   return result.embedding.values;
 }
