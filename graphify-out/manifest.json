@@ -1,0 +1,214 @@
+{
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\eslint.config.mjs": {
+    "mtime": 1769671174.4149368,
+    "hash": "bbd98d59906e9983910a552fd370ac42"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\middleware.ts": {
+    "mtime": 1769711336.7924871,
+    "hash": "bd76cd7612c790d87ebf69ae506f7917"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\migration.ts": {
+    "mtime": 1772018794.5826404,
+    "hash": "9a50c46b568b87001c9462d1d28efd9f"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\next-env.d.ts": {
+    "mtime": 1769670395.274894,
+    "hash": "ba64ff7d54714a8f64db89b1003207d8"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\next.config.ts": {
+    "mtime": 1769673113.8405137,
+    "hash": "1cf426a4742119cb70565236ed18995a"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\postcss.config.mjs": {
+    "mtime": 1769670000.2969022,
+    "hash": "239f3ebf717465dc636818a1a619398d"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\app\\layout.tsx": {
+    "mtime": 1769779002.780174,
+    "hash": "543c0363df3b8de5140e1bb5a77ab056"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\app\\page.tsx": {
+    "mtime": 1769671174.4176593,
+    "hash": "fd8a1a8a75093ef7662ba9a5174f5b54"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\app\\providers.tsx": {
+    "mtime": 1769768329.099489,
+    "hash": "58131a407af4cfb253e64ee9e713c4e2"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\app\\about\\page.tsx": {
+    "mtime": 1769843644.3840837,
+    "hash": "5948820b269f88ae7fba695d2f27f618"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\app\\api\\ai\\chat\\route.ts": {
+    "mtime": 1772019788.09438,
+    "hash": "d52b72c92e554911cfdc3a35baa0ea9f"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\app\\api\\ai\\rewrite\\route.ts": {
+    "mtime": 1769806389.0155063,
+    "hash": "530caf5ace2c20faf1b04336ea2d81e3"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\app\\api\\ai\\tags\\route.ts": {
+    "mtime": 1769711336.7924871,
+    "hash": "81ac20d6973c5273deeeede4471d65c0"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\app\\api\\notes\\route.ts": {
+    "mtime": 1769776823.967103,
+    "hash": "6962cc79542113e9b37296aaaab730d8"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\app\\api\\search\\route.ts": {
+    "mtime": 1772019742.8550012,
+    "hash": "bb843a9bbeb774c5deac15956a0fb519"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\app\\api\\tags\\route.ts": {
+    "mtime": 1769711336.7924871,
+    "hash": "81ac20d6973c5273deeeede4471d65c0"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\app\\dashboard\\page.tsx": {
+    "mtime": 1769843671.238331,
+    "hash": "4f224331e47e652ca7aead56952ba14a"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\components\\auth-provider.tsx": {
+    "mtime": 1769843634.8567944,
+    "hash": "afcf599087b1157756b6c5c0aab397ea"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\components\\SmoothScroll.tsx": {
+    "mtime": 1769774635.319973,
+    "hash": "41d0645189bfd16752830d67102b0840"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\components\\features\\add-note-sidebar.tsx": {
+    "mtime": 1769843694.7327154,
+    "hash": "544411e7c36533dc5baa5942220f590f"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\components\\features\\brain-graph.tsx": {
+    "mtime": 1772019818.9992144,
+    "hash": "befcd4fef2022adb0510f8ac522161a8"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\components\\features\\dashboard-skeleton.tsx": {
+    "mtime": 1769810474.5362108,
+    "hash": "dd7773c1fff021886f5b079f218f4462"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\components\\features\\features-section.tsx": {
+    "mtime": 1769789031.3252592,
+    "hash": "2096ed0cef1dda4973a9520ad3f4bdfb"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\components\\features\\hero.tsx": {
+    "mtime": 1769843696.6933537,
+    "hash": "51e01cf166932b2d43af9e2219a7a6c6"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\components\\features\\note-card.tsx": {
+    "mtime": 1769842619.7554393,
+    "hash": "2cdcc44b125677395f1f507288283aca"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\components\\layout\\footer.tsx": {
+    "mtime": 1769774292.2609897,
+    "hash": "4e90b9bf6e8ac5bc63ff53b39798a529"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\components\\layout\\navbar.tsx": {
+    "mtime": 1769843698.7098284,
+    "hash": "fcc2702a812ff4c10aca01c152073f5a"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\components\\modals\\chat-modal.tsx": {
+    "mtime": 1769810480.292113,
+    "hash": "32426d23da42a76c053781fd20da0987"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\components\\modals\\filter-modal.tsx": {
+    "mtime": 1769792846.4096067,
+    "hash": "b85af46ecb33974bdb767f4a39f1bcc5"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\components\\modals\\login-modal.tsx": {
+    "mtime": 1772015956.4272113,
+    "hash": "7b69ed064d0d148790ee6a9b850f5435"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\components\\theme\\theme-toggle.tsx": {
+    "mtime": 1769671174.4226348,
+    "hash": "14dec0dbc7b7fc20abfc4522960708f4"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\components\\ui\\badge.tsx": {
+    "mtime": 1769777442.5192592,
+    "hash": "82a77663ac332dd6a4d9e0d9ae09ae49"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\components\\ui\\button.tsx": {
+    "mtime": 1769789790.6219478,
+    "hash": "d03a73f72925d500f9d156f402a2d86a"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\components\\ui\\card.tsx": {
+    "mtime": 1769777241.87139,
+    "hash": "27c528ee31c8f544d01bbc971964f933"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\components\\ui\\index.ts": {
+    "mtime": 1769777300.602357,
+    "hash": "e0f4247a8a59ebd3b7d5dbca02afad6f"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\components\\ui\\input.tsx": {
+    "mtime": 1769671174.4293704,
+    "hash": "b94a11fd3ef7a1fbee464da2d7fcf637"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\components\\ui\\modal.tsx": {
+    "mtime": 1769805108.926988,
+    "hash": "1eace8a38abc163c8dc1782d0a4c5f30"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\components\\ui\\sheet.tsx": {
+    "mtime": 1769790278.3018084,
+    "hash": "53e3d7eeb03e3817f09f45108d0cbb6a"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\hooks\\useBrain.ts": {
+    "mtime": 1769809360.8826554,
+    "hash": "7a6542ce1bf7b6b8cc4f8044e4d3c138"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\lib\\ai.ts": {
+    "mtime": 1772019002.174584,
+    "hash": "46a710661ed73ccc811a496a0d056ed1"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\lib\\api.ts": {
+    "mtime": 1769685194.424718,
+    "hash": "4c869f52e0608659ee9b31231992dd54"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\lib\\mockData.ts": {
+    "mtime": 1769671174.4306328,
+    "hash": "1ef1c46d9f49a1b57899c47abd7d48e0"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\lib\\utils.ts": {
+    "mtime": 1769671174.4306328,
+    "hash": "fb45092a28b9aa1736aa6ea48bc8f608"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\lib\\store\\uiStore.ts": {
+    "mtime": 1769685194.424718,
+    "hash": "f728a9b1549ab55dcbbe29a4cba7c1e7"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\lib\\supabase\\client.ts": {
+    "mtime": 1769711336.7924871,
+    "hash": "5453d99289cf630306e5030428c0fc33"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\lib\\supabase\\middleware.ts": {
+    "mtime": 1769843700.6775713,
+    "hash": "702b97e82df3a4a95eb8362d649226c9"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\lib\\supabase\\server.ts": {
+    "mtime": 1769711336.7924871,
+    "hash": "6712c2de747bfa718b7a838c1306a2c1"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\README.md": {
+    "mtime": 1772016126.399006,
+    "hash": "edabce2aaac307237114607e83312644"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\public\\file.svg": {
+    "mtime": 1769670000.3034613,
+    "hash": "d09f95206c3fa0bb9bd9fefabfd0ea71"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\public\\globe.svg": {
+    "mtime": 1769670000.3123567,
+    "hash": "2aaafa6a49b6563925fe440891e32717"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\public\\next.svg": {
+    "mtime": 1769670000.3241687,
+    "hash": "8e061864f388b47f33a1c3780831193e"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\public\\vercel.svg": {
+    "mtime": 1769670000.3327239,
+    "hash": "c0af2f507b369b085b35ef4bbe3bcf1e"
+  },
+  "C:\\Users\\jay\\Documents\\projects\\second-brain\\public\\window.svg": {
+    "mtime": 1769670000.3399215,
+    "hash": "a2760511c65806022ad20adf74370ff3"
+  }
+}
